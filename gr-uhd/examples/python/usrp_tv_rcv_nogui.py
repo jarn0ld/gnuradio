@@ -64,16 +64,27 @@ class my_top_block(gr.top_block):
         parser.add_option("-a", "--args", type="string", default="",
                           help="UHD device address args [default=%default]")
         parser.add_option("", "--spec", type="string", default=None,
-	                  help="Subdevice of UHD device where appropriate")
+                          help="Subdevice of UHD device where appropriate")
         parser.add_option("-A", "--antenna", type="string", default=None,
+                          help="(deprecated) select Rx Antenna where appropriate")
+        parser.add_option("--ant", type="string", default=None, dest="antenna",
                           help="select Rx Antenna where appropriate")
         parser.add_option("-s", "--samp-rate", type="eng_float", default=1e6,
+                          help="(deprecated) set sample rate")
+        parser.add_option("--rate", type="eng_float", default=1e6, dest="samp_rate",
                           help="set sample rate")
         parser.add_option("-c", "--contrast", type="eng_float", default=1.0,
                           help="set contrast (default is 1.0)")
         parser.add_option("-b", "--brightness", type="eng_float", default=0.0,
                           help="set brightness (default is 0)")
         parser.add_option("-i", "--in-filename", type="string", default=None,
+                          help="(deprecated) Use input file as source. samples must be " + \
+                            "interleaved shorts \n Use usrp_rx_file.py or " + \
+                            "usrp_rx_cfile.py --output-shorts.\n Special " + \
+                            "name \"usrp\" results in realtime capturing " + \
+                            "and processing using usrp.\n" + \
+                            "You then probably need a decimation factor of 64 or higher.")
+        parser.add_option("--file", type="string", default=None, dest="in_filename",
                           help="Use input file as source. samples must be " + \
                             "interleaved shorts \n Use usrp_rx_file.py or " + \
                             "usrp_rx_cfile.py --output-shorts.\n Special " + \

@@ -37,13 +37,15 @@ def setup_parser():
     parser = argparse.ArgumentParser(
             description="Transmit a signal in a frequency-hopping manner, using tx_freq tags."
     )
-    parser.add_argument('-i', '--input-file', type=file, default=None,
+    parser.add_argument('-i', '--input-file', "--file", type=file, default=None,
             help="File with samples to transmit. If left out, will transmit a sinusoid.")
     parser.add_argument("-a", "--args", default="",
             help="UHD device address args.")
     parser.add_argument("--spec", default="",
             help="UHD subdev spec.")
     parser.add_argument("--antenna", default="",
+            help="(deprecated) UHD antenna settings.")
+    parser.add_argument("--ant", default="",dest="antenna",
             help="UHD antenna settings.")
     parser.add_argument("--gain", default=None, type=float,
             help="USRP gain (defaults to mid-point in dB).")

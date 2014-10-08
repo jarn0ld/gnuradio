@@ -290,7 +290,6 @@ def main():
     try:
         # Get command line parameters
         (options, args) = uhd_siggen.get_options()
-
         # Create the top block using these
         tb = uhd_siggen.top_block(options, args)
 

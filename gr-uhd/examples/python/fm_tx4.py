@@ -86,10 +86,14 @@ class fm_tx_block(stdgui2.std_top_block):
         parser.add_option("-a", "--args", type="string", default="",
                           help="UHD device address args [default=%default]")
         parser.add_option("", "--spec", type="string", default=None,
-	                  help="Subdevice of UHD device where appropriate")
+                          help="Subdevice of UHD device where appropriate")
         parser.add_option("-A", "--antenna", type="string", default=None,
+                          help="(deprecated) select Rx Antenna where appropriate")
+        parser.add_option("--ant", type="string", default=None, dest="antenna",
                           help="select Rx Antenna where appropriate")
         parser.add_option("-s", "--samp-rate", type="eng_float", default=400e3,
+                          help="(deprecated) set sample rate (bandwidth) [default=%default]")
+        parser.add_option("--rate", type="eng_float", default=400e3, dest="samp_rate",
                           help="set sample rate (bandwidth) [default=%default]")
         parser.add_option("-f", "--freq", type="eng_float", default=None,
                           help="set frequency to FREQ", metavar="FREQ")

@@ -70,6 +70,8 @@ class uhd_input(gr.hier_block2):
                           default="addr=192.168.10.2",
                           help="Address of UHD device, [default=%default]")
         parser.add_option("-A", "--antenna", type="string", default=None,
+                          help="(deprecated) select Rx Antenna where appropriate")
+        parser.add_option("--ant", type="string", default=None, dest="antenna",
                           help="select Rx Antenna where appropriate")
         parser.add_option("-f", "--freq", type="eng_float", default=None,
                           help="set frequency to FREQ", metavar="FREQ")

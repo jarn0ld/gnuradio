@@ -38,8 +38,10 @@ class wfm_rx_block (gr.top_block):
         parser.add_option("-a", "--args", type="string", default="",
                           help="UHD device address args [default=%default]")
         parser.add_option("", "--spec", type="string", default="A:0 A:0",
-	                  help="Subdevice of UHD device where appropriate")
+                          help="Subdevice of UHD device where appropriate")
         parser.add_option("-A", "--antenna", type="string", default=None,
+                          help="(deprecated) select Rx Antenna where appropriate")
+        parser.add_option("--ant", type="string", default=None, dest="antenna",
                           help="select Rx Antenna where appropriate")
         parser.add_option("", "--f1", type="eng_float", default=100.7e6,
                           help="set 1st station frequency to FREQ", metavar="FREQ")

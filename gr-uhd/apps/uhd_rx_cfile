@@ -172,8 +172,12 @@ def get_options():
     parser.add_option("", "--spec", type="string", default=None,
                       help="Subdevice of UHD device where appropriate")
     parser.add_option("-A", "--antenna", type="string", default=None,
+                      help="(deprecated) select Rx Antenna where appropriate")
+    parser.add_option("--ant", type="string", default=None,dest="antenna",
                       help="select Rx Antenna where appropriate")
     parser.add_option("", "--samp-rate", type="eng_float", default=1e6,
+                      help="(deprecated) set sample rate (bandwidth) [default=%default]")
+    parser.add_option("--rate", type="eng_float", default=1e6,dest="samp_rate",
                       help="set sample rate (bandwidth) [default=%default]")
     parser.add_option("-f", "--freq", type="eng_float", default=None,
                       help="set frequency to FREQ", metavar="FREQ")
@@ -190,6 +194,8 @@ def get_options():
     parser.add_option("", "--lo-offset", type="eng_float", default=None,
                       help="set daughterboard LO offset to OFFSET [default=hw default]")
     parser.add_option("", "--wire-format", type="string", default="sc16",
+                      help="(deprecated) set wire format from USRP [default=%default")
+    parser.add_option("--wirefmt", type="string", default="sc16",dest="wire_format",
                       help="set wire format from USRP [default=%default")
     parser.add_option("", "--stream-args", type="string", default="",
                       help="set stream arguments [default=%default]")

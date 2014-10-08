@@ -334,12 +334,19 @@ def get_options():
     parser.add_option("", "--spec", type="string", default=None,
                       help="Subdevice of UHD device where appropriate")
     parser.add_option("-A", "--antenna", type="string", default=None,
+                      help="(deprecated) select Rx Antenna where appropriate")
+    parser.add_option("--ant", type="string", default=None,dest="antenna",
                       help="select Rx Antenna where appropriate")
     parser.add_option("-s", "--samp-rate", type="eng_float", default=1e6,
+                      help="(deprecated) set sample rate (bandwidth) [default=%default]")
+    parser.add_option("--rate", type="eng_float", default=1e6, dest="samp_rate",
                       help="set sample rate (bandwidth) [default=%default]")
     parser.add_option("-g", "--gain", type="eng_float", default=None,
                       help="set gain in dB (default is midpoint)")
     parser.add_option("-f", "--tx-freq", type="eng_float", default=None,
+                      help="(deprecated) Set carrier frequency to FREQ [default=mid-point]",
+                      metavar="FREQ")
+    parser.add_option("--freq", type="eng_float", default=None,dest="tx_freq",
                       help="Set carrier frequency to FREQ [default=mid-point]",
                       metavar="FREQ")
     parser.add_option("-x", "--waveform-freq", type="eng_float", default=0,

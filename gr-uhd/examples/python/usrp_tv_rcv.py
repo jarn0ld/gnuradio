@@ -67,10 +67,14 @@ class tv_rx_block (stdgui2.std_top_block):
         parser.add_option("-a", "--args", type="string", default="",
                           help="UHD device address args [default=%default]")
         parser.add_option("", "--spec", type="string", default=None,
-	                  help="Subdevice of UHD device where appropriate")
+                          help="Subdevice of UHD device where appropriate")
         parser.add_option("-A", "--antenna", type="string", default=None,
+                          help="(deprecated) select Rx Antenna where appropriate")
+        parser.add_option("--ant", type="string", default=None, dest="antenna",
                           help="select Rx Antenna where appropriate")
         parser.add_option("-s", "--samp-rate", type="eng_float", default=1e6,
+                          help="(deprecated) set sample rate")
+        parser.add_option("--rate", type="eng_float", default=1e6, dest="samp_rate",
                           help="set sample rate")
         parser.add_option("-f", "--freq", type="eng_float", default=519.25e6,
                           help="set frequency to FREQ", metavar="FREQ")
@@ -84,7 +88,7 @@ class tv_rx_block (stdgui2.std_top_block):
                           help="PAL video format (this is the default)")
         parser.add_option("-n", "--ntsc", action="store_true", default=False,
                           help="NTSC video format")
-        parser.add_option("-o", "--out-filename", type="string", default="sdl",
+        parser.add_option("-o", "--out-filename", "--file", type="string", default="sdl",
                           help="For example out_raw_uchar.gray. If you don't specify an output filename you will get a video_sink_sdl realtime output window. You then need to have gr-video-sdl installed)")
         parser.add_option("-r", "--repeat", action="store_false", default=True,
                           help="repeat file in a loop")

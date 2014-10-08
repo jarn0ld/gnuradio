@@ -163,8 +163,10 @@ class MyFrame(wx.Frame):
                           help="UHD device subdev spec, [default=%default]")
         parser.add_option ("-c", "--ddc-freq", type="eng_float", default=3.9e6,
                            help="set Rx DDC frequency to FREQ", metavar="FREQ")
-        parser.add_option ("-s", "--samp-rate", type="eng_float", default=256000,
-                           help="set sample rate (bandwidth) [default=%default]")
+        parser.add_option("-s", "--samp-rate", type="eng_float", default=1e6,
+                          help="(deprecated) set sample rate (bandwidth) [default=%default]")
+        parser.add_option("-s", "--rate", type="eng_float", default=1e6, dest="samp_rate",
+                          help="set sample rate (bandwidth) [default=%default]")
         parser.add_option ("-a", "--audio_file", default="",
                            help="audio output file", metavar="FILE")
         parser.add_option ("-r", "--radio_file", default="",
