@@ -434,6 +434,22 @@ namespace gr {
       return _dev->get_time_last_pps(mboard);
     }
 
+    ::uhd::filter_vector_t usrp_source_impl::get_filters(size_t chan)
+    {
+      chan = _stream_args.channels[chan];
+      return _dev->get_rx_filters(chan);
+    }
+
+    ::uhd::digital_filter_fir_i16_ptr usrp_source_impl::cast_to_digital_filter_fir(::uhd::filter_info_base_ptr filter)
+    {
+        return boost::dynamic_pointer_cast< ::uhd::digital_filter_fir_i16 >(filter);
+    }
+
+    void usrp_source_impl::set_filter(::uhd::filter_info_base_ptr filter)
+    {
+        _dev->set_rx_filter(filter);
+    }
+
     void
     usrp_source_impl::set_time_now(const ::uhd::time_spec_t &time_spec,
                                    size_t mboard)

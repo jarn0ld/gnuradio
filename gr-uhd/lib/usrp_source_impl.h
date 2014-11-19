@@ -87,7 +87,9 @@ namespace gr {
       ::uhd::time_spec_t get_time_last_pps(size_t mboard);
       ::uhd::usrp::dboard_iface::sptr get_dboard_iface(size_t chan);
       ::uhd::usrp::multi_usrp::sptr get_device(void);
-
+      ::uhd::filter_vector_t get_filters(size_t chan);
+      ::uhd::digital_filter_fir_i16_ptr cast_to_digital_filter_fir(::uhd::filter_info_base_ptr);
+      void set_filter(::uhd::filter_info_base_ptr);
       // Set Commands
       void set_subdev_spec(const std::string &spec, size_t mboard);
       void set_samp_rate(double rate);

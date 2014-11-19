@@ -115,6 +115,17 @@
 
 %include <uhd/types/sensors.hpp>
 
+%include <uhd/types/filters.hpp>
+
+%template(filter_info_base_ptr) boost::shared_ptr<uhd::filter_info_base>;
+%template(filter_vector_t) std::vector<uhd::filter_info_base::sptr>;
+
+%template(digital_filter_base_i16) uhd::digital_filter_base<int16_t>;
+%template(digital_filter_base_i16_ptr) boost::shared_ptr<uhd::digital_filter_base<int16_t> >;
+
+%template(digital_filter_fir_i16) uhd::digital_filter_fir<int16_t>;
+%template(digital_filter_fir_i16_ptr) boost::shared_ptr<uhd::digital_filter_fir<int16_t> >;
+
 %include <uhd/stream.hpp>
 
 ////////////////////////////////////////////////////////////////////////

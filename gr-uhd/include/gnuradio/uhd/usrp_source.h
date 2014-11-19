@@ -283,6 +283,11 @@ namespace gr {
        */
       virtual std::vector<std::string> get_antennas(size_t chan = 0) = 0;
 
+
+      virtual ::uhd::filter_vector_t get_filters(size_t chan) = 0;
+      virtual void set_filter(::uhd::filter_info_base_ptr) = 0;
+
+      virtual ::uhd::digital_filter_fir_i16_ptr cast_to_digital_filter_fir(::uhd::filter_info_base_ptr) = 0;
       /*!
        * Set the bandpass filter on the RF frontend.
        * \param bandwidth the filter bandwidth in Hz
