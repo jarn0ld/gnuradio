@@ -120,6 +120,12 @@
 %template(filter_info_base_ptr) boost::shared_ptr<uhd::filter_info_base>;
 %template(filter_vector_t) std::vector<uhd::filter_info_base::sptr>;
 
+%extend uhd::filter_info_base{
+            const char *__str__() {
+                return $self->to_pp_string().c_str();
+            }
+        }
+
 %template(digital_filter_base_i16) uhd::digital_filter_base<int16_t>;
 %template(digital_filter_base_i16_ptr) boost::shared_ptr<uhd::digital_filter_base<int16_t> >;
 
