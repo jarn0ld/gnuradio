@@ -89,6 +89,7 @@ namespace gr {
       ::uhd::usrp::multi_usrp::sptr get_device(void);
       ::uhd::filter_vector_t get_filters(size_t chan);
       ::uhd::digital_filter_fir_i16_ptr cast_to_digital_filter_fir(::uhd::filter_info_base_ptr);
+      ::uhd::analog_filter_lp_ptr cast_to_analog_filter_lp(::uhd::filter_info_base_ptr filter);
       void set_filter(::uhd::filter_info_base_ptr);
       // Set Commands
       void set_subdev_spec(const std::string &spec, size_t mboard);

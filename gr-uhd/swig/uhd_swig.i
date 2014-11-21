@@ -126,6 +126,8 @@
             }
         }
 
+%template(analog_filter_lp_ptr) boost::shared_ptr<uhd::analog_filter_lp>;
+
 %template(digital_filter_base_i16) uhd::digital_filter_base<int16_t>;
 %template(digital_filter_base_i16_ptr) boost::shared_ptr<uhd::digital_filter_base<int16_t> >;
 

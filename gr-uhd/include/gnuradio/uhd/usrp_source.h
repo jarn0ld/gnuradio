@@ -288,6 +288,7 @@ namespace gr {
       virtual void set_filter(::uhd::filter_info_base_ptr) = 0;
 
       virtual ::uhd::digital_filter_fir_i16_ptr cast_to_digital_filter_fir(::uhd::filter_info_base_ptr) = 0;
+      virtual ::uhd::analog_filter_lp_ptr cast_to_analog_filter_lp(::uhd::filter_info_base_ptr filter) = 0;
       /*!
        * Set the bandpass filter on the RF frontend.
        * \param bandwidth the filter bandwidth in Hz
