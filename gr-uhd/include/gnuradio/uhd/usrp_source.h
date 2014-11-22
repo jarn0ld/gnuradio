@@ -283,12 +283,9 @@ namespace gr {
        */
       virtual std::vector<std::string> get_antennas(size_t chan = 0) = 0;
 
-
       virtual ::uhd::filter_vector_t get_filters(size_t chan) = 0;
       virtual void set_filter(::uhd::filter_info_base_ptr) = 0;
 
-      virtual ::uhd::digital_filter_fir_i16_ptr cast_to_digital_filter_fir(::uhd::filter_info_base_ptr) = 0;
-      virtual ::uhd::analog_filter_lp_ptr cast_to_analog_filter_lp(::uhd::filter_info_base_ptr filter) = 0;
       /*!
        * Set the bandpass filter on the RF frontend.
        * \param bandwidth the filter bandwidth in Hz
@@ -332,6 +329,14 @@ namespace gr {
        * \param chan the channel index 0 to N-1
        */
       virtual void set_dc_offset(const std::complex<double> &offset, size_t chan = 0) = 0;
+
+     /*!
+     * Enable/disable the automatic IQ imbalance correction.
+     *
+     * \param enb true to enable automatic DC offset correction
+     * \param chan the channel index 0 to N-1
+     */
+      virtual void set_auto_iq_balance(const bool enb, size_t chan) = 0;
 
       /*!
        * Set the RX frontend IQ imbalance correction.

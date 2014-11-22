@@ -88,8 +88,6 @@ namespace gr {
       ::uhd::usrp::dboard_iface::sptr get_dboard_iface(size_t chan);
       ::uhd::usrp::multi_usrp::sptr get_device(void);
       ::uhd::filter_vector_t get_filters(size_t chan);
-      ::uhd::digital_filter_fir_i16_ptr cast_to_digital_filter_fir(::uhd::filter_info_base_ptr);
-      ::uhd::analog_filter_lp_ptr cast_to_analog_filter_lp(::uhd::filter_info_base_ptr filter);
       void set_filter(::uhd::filter_info_base_ptr);
       // Set Commands
       void set_subdev_spec(const std::string &spec, size_t mboard);
@@ -104,6 +102,7 @@ namespace gr {
       ::uhd::freq_range_t get_bandwidth_range(size_t chan);
       void set_auto_dc_offset(const bool enable, size_t chan);
       void set_dc_offset(const std::complex<double> &offset, size_t chan);
+      void set_auto_iq_balance(const bool enb, size_t chan);
       void set_iq_balance(const std::complex<double> &correction, size_t chan);
       void set_clock_config(const ::uhd::clock_config_t &clock_config, size_t mboard);
       void set_time_source(const std::string &source, const size_t mboard);

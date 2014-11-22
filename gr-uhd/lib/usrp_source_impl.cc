@@ -304,6 +304,17 @@ namespace gr {
     }
 
     void
+    usrp_source_impl::set_auto_iq_balance(const bool enb, size_t chan)
+    {
+        chan = _stream_args.channels[chan];
+        #ifdef UHD_USRP_MULTI_USRP_FRONTEND_CAL_API
+              return _dev->set_rx_iq_balance(enb, chan);
+        #else
+              throw std::runtime_error("not implemented in this version");
+        #endif
+    }
+
+    void
     usrp_source_impl::set_iq_balance(const std::complex<double> &correction,
                                      size_t chan)
     {
@@ -438,16 +449,6 @@ namespace gr {
     {
       chan = _stream_args.channels[chan];
       return _dev->get_rx_filters(chan);
-    }
-
-    ::uhd::digital_filter_fir_i16_ptr usrp_source_impl::cast_to_digital_filter_fir(::uhd::filter_info_base_ptr filter)
-    {
-        return boost::dynamic_pointer_cast< ::uhd::digital_filter_fir_i16 >(filter);
-    }
-
-    ::uhd::analog_filter_lp_ptr usrp_source_impl::cast_to_analog_filter_lp(::uhd::filter_info_base_ptr filter)
-    {
-        return boost::dynamic_pointer_cast< ::uhd::analog_filter_lp >(filter);
     }
 
     void usrp_source_impl::set_filter(::uhd::filter_info_base_ptr filter)

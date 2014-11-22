@@ -134,6 +134,24 @@
 %template(digital_filter_fir_i16) uhd::digital_filter_fir<int16_t>;
 %template(digital_filter_fir_i16_ptr) boost::shared_ptr<uhd::digital_filter_fir<int16_t> >;
 
+%extend uhd::filter_info_base{
+
+            static boost::shared_ptr<uhd::digital_filter_fir<int16_t> > to_digital_filter_fir_i16(boost::shared_ptr<uhd::filter_info_base> filter)
+            {
+                return boost::dynamic_pointer_cast< ::uhd::digital_filter_fir_i16 >(filter);
+            }
+
+            static boost::shared_ptr<uhd::digital_filter_base<int16_t> > to_digital_filter_base_i16(boost::shared_ptr<uhd::filter_info_base> filter)
+            {
+                return boost::dynamic_pointer_cast< ::uhd::digital_filter_base_i16 >(filter);
+            }
+
+            static boost::shared_ptr<uhd::analog_filter_lp> to_analog_filter_lp(boost::shared_ptr<uhd::filter_info_base> filter)
+            {
+                return boost::dynamic_pointer_cast< ::uhd::analog_filter_lp>(filter);
+            }
+}
+
 %include <uhd/stream.hpp>
 
 ////////////////////////////////////////////////////////////////////////
