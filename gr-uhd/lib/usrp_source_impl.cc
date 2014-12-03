@@ -192,6 +192,7 @@ namespace gr {
     void
     usrp_source_impl::set_gain(double gain, size_t chan)
     {
+      std::cout<<"usrp_source_impl::set_gain"<<std::endl;
       chan = _stream_args.channels[chan];
       return _dev->set_rx_gain(gain, chan);
     }
@@ -199,8 +200,16 @@ namespace gr {
     void
     usrp_source_impl::set_gain(double gain, const std::string &name, size_t chan)
     {
+      std::cout<<"usrp_source_impl::set_gain"<<std::endl;
       chan = _stream_args.channels[chan];
       return _dev->set_rx_gain(gain, name, chan);
+    }
+
+    void usrp_source_impl::set_auto_gain(bool enb, size_t chan)
+    {
+        std::cout<<"usrp_source_impl::set_gain(bool)"<<std::endl;
+        chan = _stream_args.channels[chan];
+        _dev->set_rx_gain(enb, chan);
     }
 
     double
@@ -504,6 +513,12 @@ namespace gr {
       _start_time = time;
       _start_time_set = true;
       _stream_now = false;
+    }
+
+    double usrp_source_impl::get_rssi(size_t chan)
+    {
+        chan = _stream_args.channels[chan];
+        return _dev->get_rx_rssi(chan);
     }
 
     void

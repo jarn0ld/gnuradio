@@ -223,6 +223,15 @@ namespace gr {
                             size_t chan = 0) = 0;
 
       /*!
+       * Enable or disable the agc on the dboard.
+       * \param enb the state of the agc
+       * \param name the name of the gain stage
+       * \param chan the channel index 0 to N-1
+       */
+      virtual void set_auto_gain(bool enb,
+                            size_t chan = 0) = 0;
+
+      /*!
        * Get the actual dboard gain setting.
        * \param chan the channel index 0 to N-1
        * \return the actual gain in dB
@@ -557,6 +566,8 @@ namespace gr {
        */
       virtual std::vector<std::vector<std::complex<float> > >
         finite_acquisition_v(const size_t nsamps) = 0;
+
+      virtual double get_rssi(size_t chan = 0) = 0;
     };
 
   } /* namespace uhd */
