@@ -75,6 +75,8 @@
     void __setitem__(std::string key, std::string val) {(*self)[key] = val;}
 };
 
+%include <uhd/types/codec_config.hpp>
+
 %include <uhd/types/device_addr.hpp>
 
 %include <uhd/types/io_type.hpp>

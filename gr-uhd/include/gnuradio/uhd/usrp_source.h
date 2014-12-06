@@ -228,7 +228,7 @@ namespace gr {
        * \param name the name of the gain stage
        * \param chan the channel index 0 to N-1
        */
-      virtual void set_auto_gain(bool enb,
+      virtual void set_gain_mode(::uhd::gain_mode_t gain_mode,
                             size_t chan = 0) = 0;
 
       /*!

@@ -205,11 +205,11 @@ namespace gr {
       return _dev->set_rx_gain(gain, name, chan);
     }
 
-    void usrp_source_impl::set_auto_gain(bool enb, size_t chan)
+    void usrp_source_impl::set_gain_mode(::uhd::gain_mode_t gain_mode, size_t chan)
     {
-        std::cout<<"usrp_source_impl::set_gain(bool)"<<std::endl;
+        std::cout<<"usrp_source_impl::set_gain(bool) channel: "<<chan<<std::endl;
         chan = _stream_args.channels[chan];
-        _dev->set_rx_gain(enb, chan);
+        _dev->set_rx_gain_mode(gain_mode, chan);
     }
 
     double

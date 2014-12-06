@@ -95,7 +95,7 @@ namespace gr {
                                          size_t chan);
       void set_gain(double gain, size_t chan);
       void set_gain(double gain, const std::string &name, size_t chan);
-      void set_auto_gain(bool enb, size_t chan);
+      void set_gain_mode(::uhd::gain_mode_t gain_mode, size_t chan);
       void set_antenna(const std::string &ant, size_t chan);
       void set_bandwidth(double bandwidth, size_t chan);
       double get_bandwidth(size_t chan);
