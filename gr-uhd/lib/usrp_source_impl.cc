@@ -213,6 +213,18 @@ namespace gr {
       set_gain(abs_gain, chan);
     }
 
+    void usrp_source_impl::set_agc(bool enable, size_t chan)
+    {
+        chan = _stream_args.channels[chan];
+        _dev->set_rx_agc(enable, chan);
+    }
+
+    void usrp_source_impl::set_agc_options(const std::string& options, size_t chan)
+    {
+        chan = _stream_args.channels[chan];
+        _dev->set_rx_agc_options(options, chan);
+    }
+
     double
     usrp_source_impl::get_gain(size_t chan)
     {
