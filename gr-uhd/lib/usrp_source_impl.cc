@@ -219,10 +219,10 @@ namespace gr {
         _dev->set_rx_agc(enable, chan);
     }
 
-    void usrp_source_impl::set_agc_options(const std::string& options, size_t chan)
+    void usrp_source_impl::set_agc_config(const std::string& options, size_t chan)
     {
         chan = _stream_args.channels[chan];
-        _dev->set_rx_agc_options(options, chan);
+        _dev->set_rx_agc_config(options, chan);
     }
 
     double
