@@ -241,7 +241,6 @@ namespace gr {
       virtual void set_normalized_gain(double norm_gain, size_t chan = 0) = 0;
 
       virtual void set_agc(bool enable, size_t chan = 0) = 0;
-      virtual void set_agc_config(const std::string& options, size_t chan = 0) = 0;
 
       /*!
        * Get the actual dboard gain setting.
