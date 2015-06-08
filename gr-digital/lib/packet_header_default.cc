@@ -25,6 +25,8 @@
 
 #include <string.h>
 #include <gnuradio/digital/packet_header_default.h>
+#include <iostream>
+
 
 namespace gr {
   namespace digital {
@@ -52,10 +54,12 @@ namespace gr {
       d_header_number(0)
     {
       if (d_bits_per_byte < 1 || d_bits_per_byte > 8) {
-	throw std::invalid_argument("bits_per_byte must be in [1, 8]");
+				throw std::invalid_argument("bits_per_byte must be in [1, 8]");
       }
       d_mask = MASK_LUT[d_bits_per_byte];
-    }
+    	std::cout << "default hdr gen generated" << std::endl;
+			
+		}
 
     packet_header_default::~packet_header_default()
     {
@@ -68,24 +72,50 @@ namespace gr {
 	const std::vector<tag_t> &tags
     )
     {
-      packet_len &= 0x0FFF;
-      d_crc_impl.reset();
-      d_crc_impl.process_bytes((void const *) &packet_len, 2);
-      d_crc_impl.process_bytes((void const *) &d_header_number, 2);
-      unsigned char crc = d_crc_impl();
 
+			std::cout << "building header: len = " << packet_len << std::endl;
+
+      packet_len &= 0x0FFF;
+
+      d_crc_impl.reset();
+     d_crc_impl.process_bytes((void const *) &packet_len, 2);
+      d_crc_impl.process_bytes((void const *) &d_header_number, 2);
+
+      unsigned char crc = d_crc_impl();
+			
+			std::cout << "building header: len: " << d_header_len << " num: " << d_header_number << " crc: " << ((double)crc) << std::endl;			
+			
       memset(out, 0x00, d_header_len);
-      int k = 0; // Position in out
-      for (int i = 0; i < 12 && k < d_header_len; i += d_bits_per_byte, k++) {
-	out[k] = (unsigned char) ((packet_len >> i) & d_mask);
-      }
-      for (int i = 0; i < 12 && k < d_header_len; i += d_bits_per_byte, k++) {
-	out[k] = (unsigned char) ((d_header_number >> i) & d_mask);
-      }
-      for (int i = 0; i < 8 && k < d_header_len; i += d_bits_per_byte, k++) {
-	out[k] = (unsigned char) ((crc >> i) & d_mask);
-      }
-      d_header_number++;
+
+			int k = 0;
+			int bit_index = 0;
+			for(int i = 0; i < d_header_len * d_bits_per_byte; i++) {
+					std::cout<< "i = "<<i<<" k = "<<k<<" bit_index = "<<bit_index<<std::endl;
+
+					if(i < 12) {
+	      		out[k] |= ((packet_len >> i) & 0x01) << bit_index;
+					}
+
+					if(i >= 12 && i < 24) {
+						out[k] |= ((d_header_number >> (i - 12)) & 0x01) << bit_index;
+					}
+
+					if(i >= 24 && i < 32) {
+            out[k] |= ((crc >> (i - 24)) & 0x01) << bit_index;
+          }
+
+					bit_index++;
+					
+					if((i+1) % (d_bits_per_byte) == 0) {
+						k++;
+					}
+					if(bit_index % 8 == 0) {
+						bit_index = 0;
+					}
+			}
+
+
+			d_header_number++;
       d_header_number &= 0x0FFF;
 
       return true;
