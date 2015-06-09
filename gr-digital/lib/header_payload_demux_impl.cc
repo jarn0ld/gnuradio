@@ -230,6 +230,7 @@ namespace gr {
 	    consume_each(noutput_items - nread);
 	    break;
 	  }
+		std::cout << "trigger found. offset: " << trigger_offset << std::endl;
 	  update_special_tags(0, trigger_offset);
 	  consume_each (trigger_offset);
 	  in += trigger_offset * d_itemsize;
@@ -238,7 +239,8 @@ namespace gr {
 
 	case STATE_HEADER:
 	  if (check_items_available(d_header_len, ninput_items, noutput_items, nread)) {
-	    copy_n_symbols(in, out_header, PORT_HEADER, d_header_len);
+	    std::cout << "moving header data to output. in pointing to: " << *((gr_complex*)in) << std::endl;
+			copy_n_symbols(in, out_header, PORT_HEADER, d_header_len);
 	    d_state = STATE_WAIT_FOR_MSG;
 	    add_special_tags();
 	    produce(
