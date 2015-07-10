@@ -340,12 +340,16 @@ namespace gr {
 	pmt::pmt_t dict_items(pmt::dict_items(header_data));
 	while (!pmt::is_null(dict_items)) {
 	  pmt::pmt_t this_item(pmt::car(dict_items));
-	  d_payload_tag_keys.push_back(pmt::car(this_item));
-	  d_payload_tag_values.push_back(pmt::cdr(this_item));
 	  if (pmt::equal(pmt::car(this_item), d_len_tag_key)) {
 	    d_curr_payload_len = pmt::to_long(pmt::cdr(this_item));
-	    d_state = STATE_HEADER_RX_SUCCESS;
-	  }
+	    d_curr_payload_len *= 8;
+      d_state = STATE_HEADER_RX_SUCCESS;
+	    d_payload_tag_keys.push_back(pmt::car(this_item));
+	    d_payload_tag_values.push_back(pmt::from_long(d_curr_payload_len));
+	  } else {
+	    d_payload_tag_keys.push_back(pmt::car(this_item));
+	    d_payload_tag_values.push_back(pmt::cdr(this_item));
+    }
 	  dict_items = pmt::cdr(dict_items);
 	}
 	if (d_state == STATE_HEADER_RX_FAIL) {
