@@ -342,7 +342,7 @@ namespace gr {
 	  pmt::pmt_t this_item(pmt::car(dict_items));
 	  if (pmt::equal(pmt::car(this_item), d_len_tag_key)) {
 	    d_curr_payload_len = pmt::to_long(pmt::cdr(this_item));
-	    d_curr_payload_len *= 8;
+	    d_curr_payload_len *= 4;
       d_state = STATE_HEADER_RX_SUCCESS;
 	    d_payload_tag_keys.push_back(pmt::car(this_item));
 	    d_payload_tag_values.push_back(pmt::from_long(d_curr_payload_len));
