@@ -39,13 +39,14 @@ namespace gr {
 
     constellation_decoder_cb_impl::
     constellation_decoder_cb_impl(constellation_sptr constellation)
-      : block("constellation_decoder_cb",
+      : sync_block("constellation_decoder_cb",
 		 io_signature::make(1, 1, sizeof(gr_complex)),
 		 io_signature::make(1, 1, sizeof(unsigned char))),
 	d_constellation(constellation),
 	d_dim(constellation->dimensionality())
     {
-      set_relative_rate(1.0 / ((double)d_dim));
+      //set_relative_rate(1);
+      set_tag_propagation_policy(gr::block::TPP_DONT);
     }
 
     constellation_decoder_cb_impl::~constellation_decoder_cb_impl()
@@ -64,19 +65,24 @@ namespace gr {
     }
 
     int
-    constellation_decoder_cb_impl::general_work(int noutput_items,
-						gr_vector_int &ninput_items,
+    constellation_decoder_cb_impl::work(int noutput_items,
 						gr_vector_const_void_star &input_items,
 						gr_vector_void_star &output_items)
     {
       gr_complex const *in = (const gr_complex*)input_items[0];
       unsigned char *out = (unsigned char*)output_items[0];
-
+       
+      std::vector<tag_t> tags;
+      get_tags_in_window(tags, 0, 0, noutput_items);
+      for(int i = 0; i < tags.size(); i++) {
+ 	//std::cout << "Found tag: (" << tags[i].offset << ") "  << tags[i].key << ": " << tags[i].value << std::endl;
+        add_item_tag(0, tags[i]);
+      }
       for(int i = 0; i < noutput_items; i++) {
 	out[i] = d_constellation->decision_maker(&(in[i*d_dim]));
       }
 
-      consume_each(noutput_items * d_dim);
+//      consume_each(noutput_items * d_dim);
       return noutput_items;
     }
 

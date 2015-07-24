@@ -88,7 +88,7 @@ namespace gr {
 	  )
       );
     }
-
+    
     header_payload_demux_impl::header_payload_demux_impl(
 	int header_len,
 	int items_per_symbol,
@@ -206,13 +206,14 @@ namespace gr {
       const unsigned char *in = (const unsigned char *) input_items[0];
       unsigned char *out_header = (unsigned char *) output_items[PORT_HEADER];
       unsigned char *out_payload = (unsigned char *) output_items[PORT_PAYLOAD];
-
+      _mtx.lock();
       int nread = 0;
       int trigger_offset = 0;
-
+	//std::cout << "HPD. State: " << d_state << std::endl;
       switch (d_state) {
 	case STATE_WAIT_FOR_MSG:
 	  // In an ideal world, this would never be called
+	  _mtx.unlock();
 	  return 0;
 
 	case STATE_HEADER_RX_FAIL:
@@ -255,9 +256,11 @@ namespace gr {
 	  break;
 
 	case STATE_HEADER_RX_SUCCESS:
+        {
 	  for (unsigned i = 0; i < d_payload_tag_keys.size(); i++) {
+	    //std::cout << "adding payload tag at pos " << nitems_written(PORT_PAYLOAD) << ": " << d_payload_tag_keys[i] << " = " << d_payload_tag_values[i] << std::endl; 
 	    add_item_tag(
-		PORT_PAYLOAD,
+	    	PORT_PAYLOAD,
 		nitems_written(PORT_PAYLOAD),
 		d_payload_tag_keys[i],
 		d_payload_tag_values[i]
@@ -265,16 +268,19 @@ namespace gr {
 	  }
 	  nread += d_header_len * (d_items_per_symbol + d_gi);
 	  update_special_tags(0, nread);
-	  consume_each (nread);
+	  //consume_each (nread);
+	  consume_each(d_header_len);
 	  in += nread * d_itemsize;
 	  d_state = STATE_PAYLOAD;
-    break;
-
+	}
 	case STATE_PAYLOAD:
 	  if (check_items_available(d_curr_payload_len, ninput_items, noutput_items, nread)) {
 	    // The -1 because we won't consume the last item, it might hold the next trigger.
 	    update_special_tags(0, (d_curr_payload_len - 1) * (d_items_per_symbol + d_gi));
 	    copy_n_symbols(in, out_payload, PORT_PAYLOAD, d_curr_payload_len);
+	    //std::cout << "producing " << d_curr_payload_len << " items. Prod till now: " << nitems_written(PORT_PAYLOAD) << std::endl;
+            // check if tag is still there (how to get tags written to output???)
+	    
 	    produce(PORT_PAYLOAD, d_curr_payload_len * (d_output_symbols ? 1 : d_items_per_symbol));
 	    consume_each ((d_curr_payload_len - 1) * (d_items_per_symbol + d_gi)); // Same here
 	    set_min_noutput_items(d_output_symbols ? 1 : (d_items_per_symbol + d_gi));
@@ -285,7 +291,7 @@ namespace gr {
 	default:
 	  throw std::runtime_error("invalid state");
       } /* switch */
-
+      _mtx.unlock();
       return WORK_CALLED_PRODUCE;
     } /* general_work() */
 
@@ -327,10 +333,11 @@ namespace gr {
     void
     header_payload_demux_impl::parse_header_data_msg(pmt::pmt_t header_data)
     {
+      _mtx.lock();
       d_payload_tag_keys.clear();
       d_payload_tag_values.clear();
       d_state = STATE_HEADER_RX_FAIL;
-
+      d_curr_payload_len = 0;
       if (pmt::is_integer(header_data)) {
 	d_curr_payload_len = pmt::to_long(header_data);
 	d_payload_tag_keys.push_back(d_len_tag_key);
@@ -343,17 +350,20 @@ namespace gr {
 	  if (pmt::equal(pmt::car(this_item), d_len_tag_key)) {
 	    d_curr_payload_len = pmt::to_long(pmt::cdr(this_item));
 	    d_curr_payload_len *= 4;
-      d_state = STATE_HEADER_RX_SUCCESS;
+      	    std::cout << "extracted payload len from header data: " << d_curr_payload_len << "symbols." << std::endl;
+	    d_state = STATE_HEADER_RX_SUCCESS;
 	    d_payload_tag_keys.push_back(pmt::car(this_item));
 	    d_payload_tag_values.push_back(pmt::from_long(d_curr_payload_len));
-	  } else {
+	  
+	} else {
 	    d_payload_tag_keys.push_back(pmt::car(this_item));
 	    d_payload_tag_values.push_back(pmt::cdr(this_item));
     }
 	  dict_items = pmt::cdr(dict_items);
 	}
-	if (d_state == STATE_HEADER_RX_FAIL) {
+	if (d_curr_payload_len == 0) {
 	  GR_LOG_CRIT(d_logger, "no length tag passed from header data");
+	  d_state = STATE_HEADER_RX_FAIL;	
 	}
       } else if (header_data == pmt::PMT_F || pmt::is_null(header_data)) {
 	GR_LOG_INFO(d_logger, boost::format("Parser returned %1%") % pmt::write_string(header_data));
@@ -369,6 +379,7 @@ namespace gr {
 	  set_min_noutput_items(d_curr_payload_len * (d_output_symbols ? 1 : d_items_per_symbol));
 	}
       }
+      _mtx.unlock();
     } /* parse_header_data_msg() */
 
 
@@ -394,6 +405,7 @@ namespace gr {
 	    n_symbols * d_items_per_symbol * d_itemsize
 	);
       }
+/*
       // Copy tags
       std::vector<tag_t> tags;
       get_tags_in_range(
@@ -421,7 +433,7 @@ namespace gr {
             tags[t].key,
             tags[t].value
         );
-      }
+      } */
     } /* copy_n_symbols() */
 
     void

@@ -23,7 +23,7 @@
 #define INCLUDED_DIGITAL_HEADER_PAYLOAD_DEMUX_IMPL_H
 
 #include <gnuradio/digital/header_payload_demux.h>
-
+#include <boost/thread.hpp>
 namespace gr {
   namespace digital {
 
@@ -49,7 +49,7 @@ namespace gr {
       double d_sampling_time; //!< Inverse sampling rate
       std::vector<pmt::pmt_t> d_special_tags; //!< List of special tags
       std::vector<pmt::pmt_t> d_special_tags_last_value; //!< The current value of the special tags
-
+      boost::mutex _mtx;
       // Helper functions to make the state machine more readable
 
       //! Checks if there are enough items on the inputs and enough space on the output buffers to copy \p n_symbols symbols
