@@ -127,6 +127,7 @@ namespace gr {
        */
       static sptr make(
           int header_len,
+          int bits_per_symbol,
           int items_per_symbol=1,
           int guard_interval=0,
           const std::string &length_tag_key="frame_len",

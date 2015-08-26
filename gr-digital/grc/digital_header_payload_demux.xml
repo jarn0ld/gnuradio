@@ -4,6 +4,7 @@
   <import>from gnuradio import digital</import>
   <make>digital.header_payload_demux(
 	  $header_len,
+          $bits_per_symbol,
 	  $items_per_symbol,
 	  $guard_interval,
 	  $length_tag_key,
@@ -17,6 +18,11 @@
   <param>
     <name>Header Length (Symbols)</name>
     <key>header_len</key>
+    <type>int</type>
+  </param>
+  <param>
+    <name>Bits Per Symbol</name>
+    <key>bits_per_symbol</key>
     <type>int</type>
   </param>
   <param>

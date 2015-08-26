@@ -30,7 +30,8 @@ namespace gr {
     class header_payload_demux_impl : public header_payload_demux
     {
      private:
-      int d_header_len; //!< Number of bytes per header
+      int d_header_len; //!< Number of bytes per header 
+      int d_bits_per_symbol; //!< Number of bits per symbol
       int d_items_per_symbol; //!< Bytes per symbol
       int d_gi; //!< Bytes per guard interval
       pmt::pmt_t d_len_tag_key; //!< Key of length tag
@@ -87,6 +88,7 @@ namespace gr {
      public:
       header_payload_demux_impl(
 	int header_len,
+        int bits_per_symbol,
 	int items_per_symbol,
 	int guard_interval,
 	const std::string &length_tag_key,

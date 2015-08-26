@@ -63,6 +63,7 @@ namespace gr {
     header_payload_demux::sptr
     header_payload_demux::make(
 	int header_len,
+        int bits_per_symbol,
 	int items_per_symbol,
 	int guard_interval,
 	const std::string &length_tag_key,
@@ -76,6 +77,7 @@ namespace gr {
       return gnuradio::get_initial_sptr (
 	  new header_payload_demux_impl(
 	    header_len,
+            bits_per_symbol,
 	    items_per_symbol,
 	    guard_interval,
 	    length_tag_key,
@@ -91,6 +93,7 @@ namespace gr {
     
     header_payload_demux_impl::header_payload_demux_impl(
 	int header_len,
+        int bits_per_symbol,
 	int items_per_symbol,
 	int guard_interval,
 	const std::string &length_tag_key,
@@ -104,6 +107,7 @@ namespace gr {
 		      io_signature::make2(1, 2, itemsize, sizeof(char)),
 		      io_signature::make(2, 2, (output_symbols ? itemsize * items_per_symbol : itemsize))),
       d_header_len(header_len),
+      d_bits_per_symbol(bits_per_symbol),
       d_items_per_symbol(items_per_symbol),
       d_gi(guard_interval),
       d_len_tag_key(pmt::string_to_symbol(length_tag_key)),
@@ -268,8 +272,7 @@ namespace gr {
 	  }
 	  nread += d_header_len * (d_items_per_symbol + d_gi);
 	  update_special_tags(0, nread);
-	  //consume_each (nread);
-	  consume_each(d_header_len);
+	  consume_each (nread);
 	  in += nread * d_itemsize;
 	  d_state = STATE_PAYLOAD;
 	}
@@ -278,9 +281,6 @@ namespace gr {
 	    // The -1 because we won't consume the last item, it might hold the next trigger.
 	    update_special_tags(0, (d_curr_payload_len - 1) * (d_items_per_symbol + d_gi));
 	    copy_n_symbols(in, out_payload, PORT_PAYLOAD, d_curr_payload_len);
-	    //std::cout << "producing " << d_curr_payload_len << " items. Prod till now: " << nitems_written(PORT_PAYLOAD) << std::endl;
-            // check if tag is still there (how to get tags written to output???)
-	    
 	    produce(PORT_PAYLOAD, d_curr_payload_len * (d_output_symbols ? 1 : d_items_per_symbol));
 	    consume_each ((d_curr_payload_len - 1) * (d_items_per_symbol + d_gi)); // Same here
 	    set_min_noutput_items(d_output_symbols ? 1 : (d_items_per_symbol + d_gi));
@@ -348,9 +348,8 @@ namespace gr {
 	while (!pmt::is_null(dict_items)) {
 	  pmt::pmt_t this_item(pmt::car(dict_items));
 	  if (pmt::equal(pmt::car(this_item), d_len_tag_key)) {
-	    d_curr_payload_len = pmt::to_long(pmt::cdr(this_item));
-	    d_curr_payload_len *= 4;
-      	    std::cout << "extracted payload len from header data: " << d_curr_payload_len << "symbols." << std::endl;
+	    d_curr_payload_len = pmt::to_long(pmt::cdr(this_item)); //value in bytes
+	    d_curr_payload_len *= (int)(8/d_bits_per_symbol); //convert #bytes to #symbols
 	    d_state = STATE_HEADER_RX_SUCCESS;
 	    d_payload_tag_keys.push_back(pmt::car(this_item));
 	    d_payload_tag_values.push_back(pmt::from_long(d_curr_payload_len));
