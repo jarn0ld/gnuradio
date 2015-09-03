@@ -101,6 +101,9 @@ namespace gr {
       );
       ~header_payload_demux_impl();
 
+      void set_header_len(int num_symbols);
+      void set_bits_per_symbol(int bits_per_symbol);
+
       void forecast (int noutput_items, gr_vector_int &ninput_items_required);
 
       int general_work(int noutput_items,

@@ -150,6 +150,16 @@ namespace gr {
     {
     }
 
+    void header_payload_demux_impl::set_bits_per_symbol(int bits_per_symbol) 
+    {
+        d_bits_per_symbol = bits_per_symbol;
+    }
+
+    void header_payload_demux_impl::set_header_len(int num_symbols)
+    {
+        d_header_len = num_symbols;
+    }
+
     void
     header_payload_demux_impl::forecast (int noutput_items, gr_vector_int &ninput_items_required)
     {

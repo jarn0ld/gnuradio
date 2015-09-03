@@ -138,6 +138,9 @@ namespace gr {
           const double samp_rate=1.0,
           const std::vector<std::string> &special_tags=std::vector<std::string>()
       );
+
+      virtual void set_header_len(int num_symbols) = 0;
+      virtual void set_bits_per_symbol(int bits_per_symbol) = 0;
     };
 
   } // namespace digital
